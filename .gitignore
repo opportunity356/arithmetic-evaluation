@@ -1,0 +1,6 @@
+# Python staff
+__pycache__/
+*.py[cod]
+
+# Pycharm IDE
+.idea/*
