@@ -47,18 +47,20 @@ class RPN(object):
             elif c in self.__OPERATORS:
                 try:
                     top_elem = self.stack[-1]
-                    while self.__OPERATORS[top_elem][1] <= self.__OPERATORS[c][1]:
+                    while self.__OPERATORS[c][1] <= self.__OPERATORS[top_elem][1]:
                         self.postfix_str += ' ' + self.stack.pop()
                         top_elem = self.stack[-1]
                 except (KeyError, IndexError):  # if stack is empty or top_elem is not an operator
-                    self.stack.append(c)
-                    self.postfix_str += ' '
+                    pass
+                self.stack.append(c)
+                self.postfix_str += ' '
             elif c.isspace():
                 pass
             else:
                 raise ValueError(self.__INVALID_CHARACTER_ERROR_MSG.format(c))
 
-        for elem in self.stack:
+        while self.stack:
+            elem = self.stack.pop()
             if elem == '(':
                 raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
             else:
