@@ -7,7 +7,7 @@ from operator import add, sub, mul, div
 
 
 class RPN(object):
-    __UNBALANCED_PARENTHESISES_ERROR_MSG = 'Unbalanced parenthesises'
+    __UNBALANCED_PARENTHESES_ERROR_MSG = 'Unbalanced parentheses'
     __INVALID_CHARACTER_ERROR_MSG = 'Invalid character: {}'
     __OPERATORS = {
         '+': (add, 0),
@@ -23,7 +23,7 @@ class RPN(object):
     def convert_infix_to_postfix(self, infix_str):
         """
         Accepts string representing arithmetic expression in infix notation with
-        parenthesises and binary operators: '+', '-', '*', '/'.
+        parentheses and binary operators: '+', '-', '*', '/'.
         Returns string with expression converted to postfix notation. Each operator
         and operand in resulting string separated with space character.
         """
@@ -43,7 +43,7 @@ class RPN(object):
                         self.postfix_str += ' ' + c
                         c = self.stack.pop()
                 except IndexError:
-                    raise ValueError(self.__UNBALANCED_PARENTHESISES_ERROR_MSG)
+                    raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
             elif c in self.__OPERATORS:
                 try:
                     top_elem = self.stack[-1]
@@ -60,7 +60,7 @@ class RPN(object):
 
         for elem in self.stack:
             if elem == '(':
-                raise ValueError(self.__UNBALANCED_PARENTHESISES_ERROR_MSG)
+                raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
             else:
                 self.postfix_str += ' ' + elem
 
