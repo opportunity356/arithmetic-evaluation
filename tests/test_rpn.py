@@ -29,6 +29,12 @@ class TestInfixToPostfixConversion(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.rpn.convert_infix_to_postfix('(()')
 
+    def test_stack_is_cleared_when_error(self):
+        try:
+            self.rpn.convert_infix_to_postfix('(5+4)*3-2 &')
+        except ValueError:
+            pass
+        self.assertListEqual([], self.rpn.stack)
 
 if __name__ == '__main__':
     unittest.main()

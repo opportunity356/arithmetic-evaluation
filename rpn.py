@@ -17,7 +17,7 @@ class RPN(object):
     }
 
     def __init__(self):
-        self.stack = None
+        self.stack = list()
         self.postfix_str = None
 
     def convert_infix_to_postfix(self, infix_str):
@@ -28,42 +28,49 @@ class RPN(object):
         and operand in resulting string separated with space character.
         """
 
-        self.stack = list()
-        self.postfix_str = ''
+        try:
+            self.stack = list()
+            self.postfix_str = ''
 
-        for c in infix_str:
-            if c.isdigit():
-                self.postfix_str += c
-            elif c == '(':
-                self.stack.append(c)
-            elif c == ')':
-                try:
-                    c = self.stack.pop()
-                    while c != '(':
-                        self.postfix_str += ' ' + c
+            for c in infix_str:
+                if c.isdigit():
+                    self.postfix_str += c
+                elif c == '(':
+                    self.stack.append(c)
+                elif c == ')':
+                    try:
                         c = self.stack.pop()
-                except IndexError:
-                    raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
-            elif c in self.__OPERATORS:
-                try:
-                    top_elem = self.stack[-1]
-                    while self.__OPERATORS[c][1] <= self.__OPERATORS[top_elem][1]:
-                        self.postfix_str += ' ' + self.stack.pop()
+                        while c != '(':
+                            self.postfix_str += ' ' + c
+                            c = self.stack.pop()
+                    except IndexError:
+                        raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
+                elif c in self.__OPERATORS:
+                    try:
                         top_elem = self.stack[-1]
-                except (KeyError, IndexError):  # if stack is empty or top_elem is not an operator
+                        while self.__OPERATORS[c][1] <= self.__OPERATORS[top_elem][1]:
+                            self.postfix_str += ' ' + self.stack.pop()
+                            top_elem = self.stack[-1]
+                    except (KeyError, IndexError):  # if stack is empty or top_elem is not an operator
+                        pass
+                    self.stack.append(c)
+                    self.postfix_str += ' '
+                elif c.isspace():
                     pass
-                self.stack.append(c)
-                self.postfix_str += ' '
-            elif c.isspace():
-                pass
-            else:
-                raise ValueError(self.__INVALID_CHARACTER_ERROR_MSG.format(c))
+                else:
+                    raise ValueError(self.__INVALID_CHARACTER_ERROR_MSG.format(c))
 
-        while self.stack:
-            elem = self.stack.pop()
-            if elem == '(':
-                raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
-            else:
-                self.postfix_str += ' ' + elem
+            while self.stack:
+                elem = self.stack.pop()
+                if elem == '(':
+                    raise ValueError(self.__UNBALANCED_PARENTHESES_ERROR_MSG)
+                else:
+                    self.postfix_str += ' ' + elem
 
-        return self.postfix_str
+            return self.postfix_str
+
+        finally:
+            self.stack = list()
+
+    def evaluate_postfix(self):
+        pass
